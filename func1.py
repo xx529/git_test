@@ -1,2 +1,5 @@
-def func1():
-    print('hello world')
+from pydantic import BaseModel
+
+
+class Test(BaseModel):
+    data: str
