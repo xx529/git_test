@@ -86,7 +86,8 @@ def main():
     print(read_back)
 
     # 清理临时文件
-    os.remove(csv_path)
+    if os.path.exists(csv_path):
+        os.remove(csv_path)
 
     print("\n✅ Pandas Demo 运行完成！")
 
