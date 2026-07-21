@@ -3,10 +3,11 @@ Pandas Demo — 展示常用 pandas 操作的示例代码
 """
 
 import os
+import tempfile
 
 import pandas as pd
 
-TAX_RATE = 0.8
+AFTER_TAX_RATE = 0.8
 
 
 def main():
@@ -61,7 +62,7 @@ def main():
     print("\n" + "=" * 50)
     print("7. 添加'税后薪资'列 (按80%计算)")
     print("=" * 50)
-    df["税后薪资"] = (df["薪资"] * TAX_RATE).astype(int)
+    df["税后薪资"] = (df["薪资"] * AFTER_TAX_RATE).astype(int)
     print(df)
 
     # 8. 合并 DataFrame
@@ -79,15 +80,20 @@ def main():
     print("\n" + "=" * 50)
     print("9. CSV 读写")
     print("=" * 50)
-    csv_path = "employees_demo.csv"
-    merged.to_csv(csv_path, index=False, encoding="utf-8-sig")
-    read_back = pd.read_csv(csv_path)
-    print(f"已写入 {csv_path}，重新读取验证：")
-    print(read_back)
-
-    # 清理临时文件
-    if os.path.exists(csv_path):
-        os.remove(csv_path)
+    try:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False, encoding="utf-8-sig") as f:
+            csv_path = f.name
+            merged.to_csv(csv_path, index=False, encoding="utf-8-sig")
+        read_back = pd.read_csv(csv_path)
+        print(f"已写入临时文件 {csv_path}，重新读取验证：")
+        print(read_back)
+    except Exception as e:
+        print(f"⚠️ CSV 操作失败: {e}")
+        return
+    finally:
+        # 清理临时文件
+        if os.path.exists(csv_path):
+            os.remove(csv_path)
 
     print("\n✅ Pandas Demo 运行完成！")
 
