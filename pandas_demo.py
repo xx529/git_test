@@ -2,8 +2,11 @@
 Pandas Demo — 展示常用 pandas 操作的示例代码
 """
 
+import os
+
 import pandas as pd
-import numpy as np
+
+TAX_RATE = 0.8
 
 
 def main():
@@ -58,7 +61,7 @@ def main():
     print("\n" + "=" * 50)
     print("7. 添加'税后薪资'列 (按80%计算)")
     print("=" * 50)
-    df["税后薪资"] = (df["薪资"] * 0.8).astype(int)
+    df["税后薪资"] = (df["薪资"] * TAX_RATE).astype(int)
     print(df)
 
     # 8. 合并 DataFrame
@@ -81,6 +84,9 @@ def main():
     read_back = pd.read_csv(csv_path)
     print(f"已写入 {csv_path}，重新读取验证：")
     print(read_back)
+
+    # 清理临时文件
+    os.remove(csv_path)
 
     print("\n✅ Pandas Demo 运行完成！")
 
